@@ -232,6 +232,13 @@ A `Project` contains other `Issues`, possible `IssueTypes` to choose from, possi
 
 The **User** domain handles the business logic for users.
 
+A user can have the following global types (unconnected to a specific project):
+
+* **Site Owner** (they have all permissions)
+* **Site Admin** (they can suspend, unsuspend, and delete other users)
+* **Full User** (they can create projects, and update or delete projects they have created)
+* **User** (they can only view and be active in projects in which they have a role)
+
 ## Architecture
 
 > This section describes the software architecture of the system. Note that this is _not_ a description of specific technologies and frameworks.

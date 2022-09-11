@@ -1,0 +1,80 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="441px" height="216px" viewBox="-0.5 -0.5 441 216" content="&lt;mxfile&gt;&lt;diagram id=&quot;-zSX3t45FfH2JqKpCfiG&quot; name=&quot;Page-1&quot;&gt;7VfBbqMwEP0ariswhabHJk13V0qlqj3s2QUHvDUeZJwm6dfvGMYJlHTV3bTKJRFKmOcZmJk3z4QgnlWb74bX5R3kQgUszDdBfBMwlkYhfjtg2wGTi6gDCiPzDuoBj/JVEEhxxUrmohk4WgBlZT0EM9BaZHaAcWNgPXRbghreteaFGAGPGVdj9JfMbUlVsMs9/kPIovR3jtKrbqXi3pkqaUqew7oHxfMgnhkA251Vm5lQrne+L13c7Turu8SM0PZDAZTHC1crKq7kDeVmt75gkWP9ZGrQ+DMtbaXQivC0c3c+72ZBUAMrk5EXI+K4KQR5TXYdwMkRUAlrtuhihOJWvgyvzonDYue3LxNPqNLDVbNR0T+bBk/flt2sZaV4W+4StPUdCNHOSqnyBd/CyuXeWJ49e2tagpGv6M99g3DZWBpjlrqrSaVmoMC094mjJx4JNoh8dFekexnRYOy9b2f0Brrjm4HjgjfWZwlK8bqRT23eLrDCdks9BWuhIqfGGngWvXTCMJ1f31LRPXzZfnaEvwhjxebvlI/JpAA2ocmjLSBOyV7vBRV5rOyJKWHH8x+P+A/Y1G0EUrid4NqN5bYezwOWa0cNIz30KSWIK1loNJVYujDXL4mbyDXBFmp3sZpnUheL1ufmYo88UM0OAoxdqnajKGWeC+3IBsstf9pNZA1S27YpyRQPbN0s/JYECSY+Qzva23g4d4PcaqyFy5YygWOzFm50PsYvO8wv8Ylj/iE6vd8xdKYjOu8N/HYb/0kE7TfIU2j5U5SZDJTJwgPKTJKvUeblWZnHKzP9Z2UeovMzlDk5/KB9aB/ooM/6/A99JukJn5xXZ30er893/uZ+/ZMTzf2rRbvWez+L538A&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs>
+        <clipPath id="mx-clip-4-191-152-26-0">
+            <rect x="4" y="191" width="152" height="26"/>
+        </clipPath>
+        <clipPath id="mx-clip-9-31-147-26-0">
+            <rect x="9" y="31" width="147" height="26"/>
+        </clipPath>
+        <clipPath id="mx-clip-284-191-152-26-0">
+            <rect x="284" y="191" width="152" height="26"/>
+        </clipPath>
+    </defs>
+    <g>
+        <path d="M 160 186 L 273.63 186" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 278.88 186 L 271.88 189.5 L 273.63 186 L 271.88 182.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 186px; margin-left: 220px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
+                                has
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="220" y="189" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="11px" text-anchor="middle">
+                    has
+                </text>
+            </switch>
+        </g>
+        <path d="M 0 186 L 0 160 L 160 160 L 160 186" fill="#1ba1e2" stroke="#006eaf" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 186 L 0 212 L 160 212 L 160 186" fill="none" stroke="#006eaf" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 0 186 L 160 186" fill="none" stroke="#006eaf" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="#ffffff" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="12px">
+            <text x="79.5" y="177.5">
+                Issue
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-4-191-152-26-0)" font-size="12px">
+            <text x="5.5" y="203.5">
+                + field: type
+            </text>
+        </g>
+        <path d="M 5 26 L 5 0 L 160 0 L 160 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 5 26 L 5 52 L 160 52 L 160 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 5 26 L 160 26" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="12px">
+            <text x="82" y="17.5">
+                Project
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-9-31-147-26-0)" font-size="12px">
+            <text x="10.5" y="43.5">
+                + field: type
+            </text>
+        </g>
+        <path d="M 280 186 L 280 160 L 440 160 L 440 186" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 280 186 L 280 212 L 440 212 L 440 186" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <path d="M 280 186 L 440 186" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="none"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" text-anchor="middle" font-size="12px">
+            <text x="359.5" y="177.5">
+                IssueRelation
+            </text>
+        </g>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" pointer-events="none" clip-path="url(#mx-clip-284-191-152-26-0)" font-size="12px">
+            <text x="285.5" y="203.5">
+                + field: type
+            </text>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Viewer does not support full SVG 1.1
+            </text>
+        </a>
+    </switch>
+</svg>
