@@ -1,4 +1,4 @@
-export enum BoardSwimlaneTypes {
+export enum SwimlaneTypeId {
     /** Display no swimlanes. */
     None = 0,
     /** Display swimlanes based on a specific issue type level. */

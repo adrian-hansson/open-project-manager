@@ -1,22 +1,33 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllIssues } from "api/issues/fetchAllIssues";
-import { Board } from "features/board/components/Board";
-import { mockAllIssueTypes, mockAllPeople, mockAllSprints, mockAllStatuses, mockAllTeams } from "mock/issues/mockAllIssues";
-import { Page } from "shared/components/Page";
+import { fetchProject } from "api/projects/fetchProject";
+import Loading from "shared/components/Loading";
+import GenericBoard from "../GenericBoard";
 
-export function BoardPage() {
-    const query = useQuery(['issues'], fetchAllIssues);
+export const BoardPage = () => {
+    const title: string = "Board";
+    // const [isLoading, setIsLoading] = useState(true);
+    // const [project, setProject] = useState<IProject | undefined>(undefined);
+
+    const query = useQuery(['project', 'p001'], ( { queryKey }) => fetchProject(queryKey[1]));
+
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     projectApi.findOne("")
+    //         .then(project => setProject(project))
+    //         .finally(() => setIsLoading(false));
+    // }, []);
 
     return (
-        <Page query={query}>
-            <Board
-                issues={query.data || []}
-                issueTypes={mockAllIssueTypes()}
-                statuses={mockAllStatuses()}
-                sprints={mockAllSprints()}
-                teams={mockAllTeams()}
-                people={mockAllPeople()}
+        <section className="page">
+            <header style={{display: 'none'}}>
+                <h2>{title}</h2>
+            </header>
+            <Loading
+                isLoading={query.isLoading}
+                element={!!query.data &&  <GenericBoard title='Board' project={query.data} />}
+                fallback={<div>Not found!</div>}
             />
-        </Page>
-    );
+        </section>
+        
+    )
 }

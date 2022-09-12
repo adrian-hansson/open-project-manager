@@ -2,6 +2,8 @@ import { DefaultIssueTypeIds } from "core/enums/DefaultIssueTypeIds";
 import { IIssue } from "core/types/IIssue";
 import { IIssueType } from "core/types/IIssueType";
 import { IPerson } from "core/types/IPerson";
+import { IProject } from "core/types/IProject";
+import { IRelease } from "core/types/IRelease";
 import { ISprint } from "core/types/ISprint";
 import { IStatus } from "core/types/IStatus";
 import { ITeam } from "core/types/ITeam";
@@ -35,6 +37,19 @@ export function mockAllSprints(): ISprint[] {
             title: `Sprint ${id}`,
             startDate: new Date(),
             endDate: new Date()
+        }));
+}
+
+export function mockAllReleases(): IRelease[] {
+    return getRangeOfNumbers(1, 16)
+        .map((id, i) => ({
+            id: id,
+            title: `Release ${id}`,
+            date: new Date(
+                (new Date()).getFullYear() + i,
+                (new Date()).getMonth(),
+                (new Date()).getDay()
+            ),
         }));
 }
 
@@ -94,6 +109,10 @@ export function mockStatus(): IStatus {
     return getRandomElementFromArray<IStatus>(mockAllStatuses());
 }
 
+export function mockTeam(): ITeam {
+    return getRandomElementFromArray<ITeam>(mockAllTeams());
+}
+
 export function mockIssue(id: number, type: IIssueType): IIssue {
     const issue: IIssue = {
         id: id,
@@ -101,6 +120,7 @@ export function mockIssue(id: number, type: IIssueType): IIssue {
         projectId: 1,
         type: type,
         status: mockStatus(),
+        team: mockTeam(),
         tags: []
     };
 
@@ -174,4 +194,17 @@ export function mockAllIssues(): IIssue[] {
     mockIssueParentage(issues, 1);
 
     return issues;
+}
+
+export function mockProject(id: string): IProject {
+    return {
+        id: id,
+        issues: mockAllIssues(),
+        issueTypes: mockAllIssueTypes(),
+        statuses: mockAllStatuses(),
+        people: mockAllPeople(),
+        teams: mockAllTeams(),
+        sprints: mockAllSprints(),
+        releases: mockAllReleases()
+    };
 }

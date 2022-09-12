@@ -9,6 +9,8 @@ import { ITeam } from "./ITeam";
 export interface IIssue {
     id: number;
     projectId: number;
+    url?: string;
+
     title: string;
     description?: string;
     type: IIssueType;
