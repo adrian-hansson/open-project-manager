@@ -1,4 +1,5 @@
 import { ColumnConstants } from "core/constants/BoardColumnConstants";
+import { SwimlaneConstants } from "core/constants/BoardSwimlaneConstants";
 import { ColumnTypeId } from "core/enums/BoardColumnsTypes";
 import { SwimlaneTypeId } from "core/enums/BoardSwimlaneTypes";
 import { IIssue } from "core/types/IIssue";
@@ -10,6 +11,7 @@ import { ISprint } from "core/types/ISprint";
 import { IStatus } from "core/types/IStatus";
 import { ITeam } from "core/types/ITeam";
 import { useState } from "react";
+import Checkbox from "shared/components/Checkbox";
 import Grid from "shared/components/grid/Grid";
 import Multiselect, { MultiselectOption } from "shared/components/Multiselect";
 import './Board.scss';
@@ -39,41 +41,39 @@ export function Board(props: IBoardProps) {
     const [project, setProject] = useState<IProject>(props.project);
 
     // SWIMLANES
-    const [swimlaneType, setSwimlaneType] = useState<SwimlaneTypeId>(SwimlaneTypeId.IssueType);
+    const [swimlaneType, setSwimlaneType] = useState<INamedEntity>(SwimlaneConstants.ISSUE_TYPE);
     const [swimlaneIssueType, setSwimlaneIssueType] = useState<IIssueType | undefined>(
         project.issueTypes.length > 1 ? project.issueTypes[1] : (project.issueTypes.length > 0 ? project.issueTypes[0] : undefined)
     );
-    const [swimlaneAssignee, setSwimlaneAssignee] = useState<IPerson | undefined>(undefined);
+    const [swimlaneAssignees, setSwimlaneAssignees] = useState<IPerson[]>(project.people);
     const [swimlaneTeams, setSwimlaneTeams] = useState<ITeam[]>(project.teams);
     const [hideEmptySwimlanes, setHideEmptySwimlanes] = useState<boolean>(false);
 
-    let swimlanesB: { header: INamedEntity, issues: IIssue[] }[] = [];
-    let swimlanes: INamedEntity[][] = [];
+    let swimlanes: { header: INamedEntity, issues: IIssue[] }[] = [];
     let issuesToUseAsSwimlanes: IIssue[] = [];
 
-    if (swimlaneType === SwimlaneTypeId.IssueType) {
+    if (swimlaneType.id === SwimlaneTypeId.IssueType) {
         issuesToUseAsSwimlanes = props.project.issues.filter(issue => issue.type.id === swimlaneIssueType?.id);
-        swimlanes = issuesToUseAsSwimlanes.map(swimlaneIssue => ([
-            swimlaneIssue,
-            ...project.issues.filter(issue => issue.parent?.id === swimlaneIssue.id)
-        ]));
 
-        swimlanesB = issuesToUseAsSwimlanes.map(swimlaneIssue => ({
+        swimlanes = issuesToUseAsSwimlanes.map(swimlaneIssue => ({
             header: swimlaneIssue,
             issues: project.issues.filter(issue => issue.parent?.id === swimlaneIssue.id)
         }));
 
-        console.log('swimlanes', swimlanes);
-    } else if (swimlaneType === SwimlaneTypeId.Team) {
-        swimlanes = project.teams.map(team => ([
-            team,
-            ...project.issues.filter(issue => issue.team?.id === team.id)
-        ]));
-
-        swimlanesB = props.project.teams.map(swimlaneTeam => ({
+    } else if (swimlaneType.id === SwimlaneTypeId.Team) {
+        swimlanes = swimlaneTeams.map(swimlaneTeam => ({
             header: swimlaneTeam,
-            issues: project.issues.filter(issue => issue.parent?.id === swimlaneTeam.id)
+            issues: project.issues.filter(issue => issue.team?.id === swimlaneTeam.id)
         }));
+    } else if (swimlaneType.id === SwimlaneTypeId.Assignee) {
+        swimlanes = swimlaneAssignees.map(swimlaneAssignee => ({
+            header: swimlaneAssignee,
+            issues: project.issues.filter(issue => issue.assignee?.id === swimlaneAssignee.id)
+        }));
+    }
+
+    if (hideEmptySwimlanes) {
+        swimlanes = swimlanes.filter(swimlane => swimlane.issues.length > 0);
     }
 
     // COLUMNS
@@ -98,13 +98,13 @@ export function Board(props: IBoardProps) {
     // GRID
     const boardIssues: IIssue[][][] = [];
 
-    for (let i = 0; i < swimlanesB.length; i++) {
+    for (let i = 0; i < swimlanes.length; i++) {
         boardIssues.push([]);
         for (let j = 0; j < columnsB.length; j++) {
             boardIssues[i].push([]);
             // if (i === 0 && j === 0) continue;
 
-            boardIssues[i][j] = swimlanesB[i].issues.filter(issueInSwimlane => columnsB[j].issues.find(issueInColumn => issueInColumn.id === issueInSwimlane.id))
+            boardIssues[i][j] = swimlanes[i].issues.filter(issueInSwimlane => columnsB[j].issues.find(issueInColumn => issueInColumn.id === issueInSwimlane.id))
         }
     }
 
@@ -113,7 +113,7 @@ export function Board(props: IBoardProps) {
             <></>,
             ...columnsB.map(column => <div>{column.header.title}</div>)
         ],
-        ...swimlanesB.map((swimlane, swimlaneIndex) => ([
+        ...swimlanes.map((swimlane, swimlaneIndex) => ([
             <div>{swimlane.header.title}</div>,
             ...boardIssues[swimlaneIndex].map((issues, columnIndex) => issues.map(issue => <BoardItem issue={issue} />))
         ]))
@@ -126,19 +126,21 @@ export function Board(props: IBoardProps) {
                     <Filter
                         project={props.project}
                         setProject={setProject} />
+
+                    {/* SWIMLANES FILTER */}
                     <fieldset>
                         <legend>Swimlanes</legend>
                         <Multiselect
-                            options={mapEnumToMultiselectOptions(SwimlaneTypeId).map(option => ({
-                                id: option.id,
-                                title: option.title,
-                                value: option.value,
-                                selected: swimlaneType === SwimlaneTypeId[option.title as keyof typeof SwimlaneTypeId]
+                            options={SwimlaneConstants.ALL.map(s => ({
+                                id: s.id,
+                                title: s.title,
+                                value: s,
+                                selected: swimlaneType.id === s.id
                             }))}
-                            onValueChanges={((_, selected) => setSwimlaneType(SwimlaneTypeId[selected?.title as keyof typeof SwimlaneTypeId]))}
+                            onValueChanges={((_, selected) => setSwimlaneType(selected?.value))}
                             isSingleSelect
                         />
-                        {swimlaneType === SwimlaneTypeId.IssueType &&
+                        {swimlaneType.id === SwimlaneTypeId.IssueType &&
                             <Multiselect
                                 options={props.project.issueTypes.map(issueType => ({
                                     id: issueType.id,
@@ -150,13 +152,13 @@ export function Board(props: IBoardProps) {
                                 isSingleSelect
                             />
                         }
-                        {swimlaneType === SwimlaneTypeId.Team &&
+                        {swimlaneType.id === SwimlaneTypeId.Team &&
                             <Multiselect
                                 options={props.project.teams.map(team => ({
                                     id: team.id,
                                     title: team.title,
                                     value: team,
-                                    selected: true //team.id === swimlaneTeam?.id
+                                    selected: true
                                 }))}
                                 onValueChanges={((selections) => {
                                     const selectedTeams: ITeam[] = [];
@@ -174,7 +176,38 @@ export function Board(props: IBoardProps) {
                                 })}
                             />
                         }
+                        {swimlaneType.id === SwimlaneTypeId.Assignee &&
+                            <Multiselect
+                                options={props.project.people.map(person => ({
+                                    id: person.id,
+                                    title: person.title,
+                                    value: person,
+                                    selected: !!swimlaneAssignees.find(assignee => assignee.id === person.id)
+                                }))}
+                                onValueChanges={((selections) => {
+                                    const selectedTeams: IPerson[] = [];
+                                    selections.forEach(selection => {
+                                        if (selection.selected) {
+                                            const selectedPerson: IPerson | undefined = props.project.people
+                                                .find(person => person.id === selection.id);
+
+                                            if (selectedPerson) {
+                                                selectedTeams.push(selectedPerson);
+                                            }
+                                        }
+                                    });
+                                    setSwimlaneAssignees(selectedTeams);
+                                })}
+                            />
+                        }
+                        <Checkbox
+                            label="Hide empty"
+                            defaultValue={hideEmptySwimlanes}
+                            onValueChanges={setHideEmptySwimlanes}
+                        />
                     </fieldset>
+
+                    {/* COLUMNS FILTER */}
                     <fieldset>
                         <legend>Columns</legend>
                         <Multiselect

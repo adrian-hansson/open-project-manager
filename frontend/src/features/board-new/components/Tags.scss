@@ -1,0 +1,21 @@
+@import '../../../styles/styles.scss';
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .tag {
+        background-color: $color-medium;
+        color: $color-secondary;
+
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.250rem;
+
+        font-size: 0.60rem;
+    }
+}

@@ -3,7 +3,7 @@ import { useId } from "react";
 export interface ICheckboxProps {
     label?: string;
     defaultValue: boolean;
-    onValueChanges?: (value: boolean) => void;
+    onValueChanges?: (value: boolean) => any;
 }
 
 function Checkbox(props: ICheckboxProps) {

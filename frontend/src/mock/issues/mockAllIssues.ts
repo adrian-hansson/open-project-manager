@@ -98,11 +98,56 @@ export function mockIssueType(): IIssueType {
 }
 
 export function mockAllStatuses(): IStatus[] {
-    return [10, 20, 40, 50, 90].map((value, index) => ({
-        id: index + 1,
-        title: (index + 1) + " - Status",
-        value: value
-    }));
+    return [
+        {
+            id: 1,
+            title: 10 + " - Todo",
+            value: 10,
+            isStarted: false,
+            isCompleted: false,
+            isBlocked: false
+        },
+        {
+            id: 2,
+            title: 20 + " - In Progress",
+            value: 20,
+            isStarted: true,
+            isCompleted: false,
+            isBlocked: false
+        },
+        {
+            id: 3,
+            title: 30 + " - Blocked",
+            value: 30,
+            isStarted: true,
+            isCompleted: false,
+            isBlocked: true
+        },
+        {
+            id: 4,
+            title: 40 + " - In Review",
+            value: 40,
+            isStarted: true,
+            isCompleted: false,
+            isBlocked: false
+        },
+        {
+            id: 5,
+            title: 90 + " - Done",
+            value: 90,
+            isStarted: true,
+            isCompleted: true,
+            isBlocked: false
+        }
+    ];
+    // return [10, 20, 40, 50, 90].map((value, index) => ({
+    //     id: index + 1,
+    //     title: (index + 1) + " - Status",
+    //     value: value,
+    //     isStarted: value > 10,
+    //     isCompleted: value >= 90,
+    //     isBlocked: value === 40
+    // }));
 }
 
 export function mockStatus(): IStatus {
@@ -113,15 +158,29 @@ export function mockTeam(): ITeam {
     return getRandomElementFromArray<ITeam>(mockAllTeams());
 }
 
+export function mockTags(): string[] {
+    const tags: string[] = [];
+    const availableTags: string[] = ['gui', 'db', 'backend', 'service', 'integration', 'architecture', 'enabler', 'bug'];
+
+    tags.push(getRandomElementFromArray<string>(availableTags));
+
+    return tags;
+}
+
+export function mockAssignee(): IPerson {
+    return getRandomElementFromArray(mockAllPeople());
+}
+
 export function mockIssue(id: number, type: IIssueType): IIssue {
     const issue: IIssue = {
         id: id,
         title: mockText(),
         projectId: 1,
         type: type,
+        assignee: mockAssignee(),
         status: mockStatus(),
         team: mockTeam(),
-        tags: []
+        tags: mockTags()
     };
 
     issue.title = issue.type.title + ' ' + issue.id + ': ' + issue.title;
@@ -183,7 +242,7 @@ export function mockIssueParentage(issues: IIssue[], level: number): void {
 }
 
 export function mockAllIssues(): IIssue[] {
-    const issues: IIssue[] = getRangeOfNumbers(1, 150).map(id => {
+    const issues: IIssue[] = getRangeOfNumbers(1, 5000).map(id => {
         return mockIssue(
             id,
             mockIssueType()

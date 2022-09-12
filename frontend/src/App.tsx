@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'App.css';
-import { BoardPage } from 'features/board-new/pages/BoardPage';
+import Layout from 'layout/Layout';
 
 const queryClient = new QueryClient()
 
@@ -22,7 +22,8 @@ function App() {
                 Learn React
                 </a>
                 </header> */}
-                <BoardPage />
+                <Layout />
+                {/* <BoardPage /> */}
             </div>
         </QueryClientProvider>
     );
