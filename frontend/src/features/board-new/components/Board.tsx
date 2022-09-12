@@ -1,4 +1,5 @@
-import { BoardColumnTypes } from "core/enums/BoardColumnsTypes";
+import { ColumnConstants } from "core/constants/BoardColumnConstants";
+import { ColumnTypeId } from "core/enums/BoardColumnsTypes";
 import { SwimlaneTypeId } from "core/enums/BoardSwimlaneTypes";
 import { IIssue } from "core/types/IIssue";
 import { IIssueType } from "core/types/IIssueType";
@@ -17,12 +18,6 @@ import { Filter } from "./Filter";
 
 export interface IBoardProps {
     project: IProject;
-    // issues: IIssue[];
-    // issueTypes: IIssueType[];
-    // statuses: IStatus[];
-    // sprints: ISprint[];
-    // teams: ITeam[];
-    // people: IPerson[];
 }
 
 export function mapEnumToMultiselectOptions(enumToMap: any): MultiselectOption[] {
@@ -43,21 +38,6 @@ export function Board(props: IBoardProps) {
     console.log('issues', props.project.issues);
     const [project, setProject] = useState<IProject>(props.project);
 
-    // // FILTER
-    // const [search, setSearch] = useState<string | undefined>('Subtask 3');
-    // const [labels, setLabels] = useState<string | undefined>(undefined);
-    // const [issueTypes, setIssueTypes] = useState<IIssueType[]>(props.project.issueTypes.length > 1 ? [props.project.issueTypes[0]] : []);
-    // const [teams, setTeams] = useState<ITeam[]>(props.project.teams.length > 1 ? [props.project.teams[0]] : []);
-    // const [sprints, setSprints] = useState<ISprint[]>(props.project.sprints.length > 1 ? [props.project.sprints[0]] : []);
-
-    // let filteredIssues: IIssue[] = props.project.issues.filter(issue => {
-    //     return (search !== undefined && issue.title.includes(search)) &&
-    //            (labels && !((labels || '').split(',').map(label => label.trim()).map(label => issue.tags.includes(label)).some(hasLabel => hasLabel))) &&
-    //            (issueTypes.length > 0 && issueTypes.some(issueType => issueType.id === issue.type.id)) &&
-    //            (teams.length > 0 && teams.some(team => team.id === issue.team?.id)) &&
-    //            (sprints.length > 0 && sprints.some(sprint => sprint.id === issue.sprint?.id));
-    // });
-
     // SWIMLANES
     const [swimlaneType, setSwimlaneType] = useState<SwimlaneTypeId>(SwimlaneTypeId.IssueType);
     const [swimlaneIssueType, setSwimlaneIssueType] = useState<IIssueType | undefined>(
@@ -67,6 +47,7 @@ export function Board(props: IBoardProps) {
     const [swimlaneTeams, setSwimlaneTeams] = useState<ITeam[]>(project.teams);
     const [hideEmptySwimlanes, setHideEmptySwimlanes] = useState<boolean>(false);
 
+    let swimlanesB: { header: INamedEntity, issues: IIssue[] }[] = [];
     let swimlanes: INamedEntity[][] = [];
     let issuesToUseAsSwimlanes: IIssue[] = [];
 
@@ -76,18 +57,67 @@ export function Board(props: IBoardProps) {
             swimlaneIssue,
             ...project.issues.filter(issue => issue.parent?.id === swimlaneIssue.id)
         ]));
+
+        swimlanesB = issuesToUseAsSwimlanes.map(swimlaneIssue => ({
+            header: swimlaneIssue,
+            issues: project.issues.filter(issue => issue.parent?.id === swimlaneIssue.id)
+        }));
+
         console.log('swimlanes', swimlanes);
     } else if (swimlaneType === SwimlaneTypeId.Team) {
         swimlanes = project.teams.map(team => ([
             team,
             ...project.issues.filter(issue => issue.team?.id === team.id)
         ]));
+
+        swimlanesB = props.project.teams.map(swimlaneTeam => ({
+            header: swimlaneTeam,
+            issues: project.issues.filter(issue => issue.parent?.id === swimlaneTeam.id)
+        }));
     }
 
     // COLUMNS
-    const [columnType, setColumnType] = useState<BoardColumnTypes>(BoardColumnTypes.Status);
-    const [columnStatus, setColumnStatus] = useState<IStatus | undefined>(undefined);
-    const [columnSprint, setColumnSprint] = useState<ISprint | undefined>(undefined);
+    const [columnType, setColumnType] = useState<INamedEntity>(ColumnConstants.STATUS);
+    const [columnStatus, setColumnStatus] = useState<IStatus[]>(project.statuses);
+    const [columnSprint, setColumnSprint] = useState<ISprint[]>(project.sprints);
+
+    let columnsB: { header: INamedEntity, issues: IIssue[] }[] = [];
+
+    if (columnType.id === ColumnTypeId.Status) {
+        columnsB = columnStatus.map(status => ({
+            header: status,
+            issues: project.issues.filter(issue => issue.status.id === status.id)
+        }));
+    } else if (columnType.id === ColumnTypeId.Sprint) {
+        columnsB = columnSprint.map(sprint => ({
+            header: sprint,
+            issues: project.issues.filter(issue => issue.sprint?.id === sprint.id)
+        }));
+    }
+
+    // GRID
+    const boardIssues: IIssue[][][] = [];
+
+    for (let i = 0; i < swimlanesB.length; i++) {
+        boardIssues.push([]);
+        for (let j = 0; j < columnsB.length; j++) {
+            boardIssues[i].push([]);
+            // if (i === 0 && j === 0) continue;
+
+            boardIssues[i][j] = swimlanesB[i].issues.filter(issueInSwimlane => columnsB[j].issues.find(issueInColumn => issueInColumn.id === issueInSwimlane.id))
+        }
+    }
+
+    const grid = [
+        [
+            <></>,
+            ...columnsB.map(column => <div>{column.header.title}</div>)
+        ],
+        ...swimlanesB.map((swimlane, swimlaneIndex) => ([
+            <div>{swimlane.header.title}</div>,
+            ...boardIssues[swimlaneIndex].map((issues, columnIndex) => issues.map(issue => <BoardItem issue={issue} />))
+        ]))
+    ];
 
     return (
         <div className="board">
@@ -147,30 +177,53 @@ export function Board(props: IBoardProps) {
                     </fieldset>
                     <fieldset>
                         <legend>Columns</legend>
-                    </fieldset>
-                    {/* {swimlaneType === BoardSwimlaneTypes.Assignee &&
                         <Multiselect
-                            options={props.people.map(person => ({
-                                id: person.id,
-                                title: person.title,
-                                value: person,
-                                selected: person.id === swimlaneAssignee?.id
+                            options={ColumnConstants.ALL.map((column, i) => ({
+                                id: column.id,
+                                title: column.title,
+                                value: column,
+                                selected: column.id === columnType.id
                             }))}
+                            onValueChanges={((options, selected, value) => {
+                                setColumnType(value)
+                            })}
+                            isSingleSelect
                         />
-                    } */}
+                        {columnType.id === ColumnTypeId.Status &&
+                            <Multiselect
+                                options={props.project.statuses.map(status => ({
+                                    id: status.id,
+                                    title: status.title,
+                                    value: status,
+                                    selected: !!columnStatus.find(selectedStatus => selectedStatus.id === status.id)
+                                }))}
+                                onValueChanges={((options, selected, value) => {
+                                    setColumnStatus(options.filter(option => option.selected).map(option => option.value));
+                                })}
+                            />
+                        }
+                        {columnType.id === ColumnTypeId.Sprint &&
+                            <Multiselect
+                                options={props.project.sprints.map(sprint => ({
+                                    id: sprint.id,
+                                    title: sprint.title,
+                                    value: sprint,
+                                    selected: !!columnSprint.find(selectedSprint => selectedSprint.id === sprint.id)
+                                }))}
+                                onValueChanges={((options, selected, value) => {
+                                    setColumnSprint(options.filter(option => option.selected).map(option => option.value));
+                                })}
+                            />
+                        }
+                    </fieldset>
                 </form>
             </header>
             <Grid
                 id={'board-grid'}
                 hideEmptyRows={false}
-                grid={swimlanes.map(swimlane => swimlane.map(swimlaneItem => <BoardItem issue={swimlaneItem as IIssue} />))}
+                grid={grid}
+                // grid={swimlanes.map(swimlane => swimlane.map(swimlaneItem => <BoardItem issue={swimlaneItem as IIssue} />))}
             />
-            {/* {swimlanes.map(swimlane => (
-                <div className="swimlane">
-                    {swimlane.map(item => <span>[{item.id + " " + item.title}]</span>)}
-                </div>
-            ))} */}
-            {/* {JSON.stringify(props.issues)} */}
         </div>
     );
 }
