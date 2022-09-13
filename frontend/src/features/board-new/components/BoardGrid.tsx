@@ -6,7 +6,6 @@ import Grid from "shared/components/grid/Grid";
 export interface IBoardGridProps {
     swimlanes: { header: INamedEntity, issues: IIssue[] }[];
     columns: { header: INamedEntity, issues: IIssue[] }[];
-    // issues: IIssue[];
 }
 
 export function BoardGrid(props: IBoardGridProps) {
@@ -16,8 +15,6 @@ export function BoardGrid(props: IBoardGridProps) {
         boardIssues.push([]);
         for (let j = 0; j < props.columns.length; j++) {
             boardIssues[i].push([]);
-            // if (i === 0 && j === 0) continue;
-
             boardIssues[i][j] = props.swimlanes[i].issues.filter(issueInSwimlane => props.columns[j].issues.find(issueInColumn => issueInColumn.id === issueInSwimlane.id))
         }
     }
