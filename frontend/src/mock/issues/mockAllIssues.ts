@@ -76,13 +76,13 @@ export function mockAllIssueTypes(): IIssueType[] {
 export function mockIssueType(): IIssueType {
     const random: number = Math.random();
 
-    if (random > 0.9) {
+    if (random > 0.995) {
         return {
             id: DefaultIssueTypeIds.Epic,
             title: 'Epic',
             level: 2
         }
-    } else if (random > 0.6) {
+    } else if (random > 0.95) {
         return {
             id: DefaultIssueTypeIds.UserStory,
             title: 'User story',

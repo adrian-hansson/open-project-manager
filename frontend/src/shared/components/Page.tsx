@@ -1,7 +1,7 @@
 import { UseQueryResult } from "@tanstack/react-query";
 
 export interface IPageProps {
-    query: UseQueryResult<any, unknown>
+    query: UseQueryResult<any, unknown> | { isLoading: boolean, isError: boolean } // TODO: remove alt
     children: any;
 }
 

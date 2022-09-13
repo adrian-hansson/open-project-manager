@@ -19,7 +19,7 @@ function LayoutNav() {
                 {Array
                     .from(links.entries())
                     .map(([link, text]) => {
-                        return <li><Link to={link} key={link} className={location.pathname.includes(link) ? "active" : ""}>{text}</Link></li>;
+                        return <li key={link}><Link to={link} key={link} className={location.pathname.includes(link) ? "active" : ""}>{text}</Link></li>;
                     })}
             </ul>
         </nav>

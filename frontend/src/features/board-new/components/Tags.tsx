@@ -7,7 +7,7 @@ export interface ITagsProps {
 export function Tags(props: ITagsProps) {
     return (
         <ul className="tags">
-            {props.tags.map(tag => <li className="tag">{tag}</li>)}
+            {props.tags.map(tag => <li key={tag} className="tag">{tag}</li>)}
         </ul>
     );
 }
