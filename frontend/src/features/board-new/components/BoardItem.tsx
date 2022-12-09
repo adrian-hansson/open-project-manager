@@ -16,13 +16,18 @@ export function BoardItem(props: IBoardItemProps) {
     const sideClassNames: string[] = [
         'side'
     ];
-    if (props.issue.status.isCompleted) sideClassNames.push('completed');
-    if (props.issue.status.isBlocked) sideClassNames.push('blocked');
-    if (props.issue.status.isStarted) sideClassNames.push('started');
+    // if (props.issue.status.isCompleted) sideClassNames.push('completed');
+    // if (props.issue.status.isBlocked) sideClassNames.push('blocked');
+    // if (props.issue.status.isStarted) sideClassNames.push('started');
 
     return (
         <div className={cardClassNames.join(' ')}>
-            <div className={sideClassNames.join(' ')}></div>
+            <div
+                className={sideClassNames.join(' ')}
+                style={{
+                    backgroundColor: props.issue.type.color
+                }}
+            ></div>
             <div className="body">
                 <header>
                     <a

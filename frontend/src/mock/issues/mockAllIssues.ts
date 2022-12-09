@@ -32,12 +32,20 @@ export function mockAllTeams(): ITeam[] {
 
 export function mockAllSprints(): ISprint[] {
     return getRangeOfNumbers(1, 16)
-        .map(id => ({
-            id: id,
-            title: `Sprint ${id}`,
-            startDate: new Date(),
-            endDate: new Date()
-        }));
+        .map((id, i) => {
+            const startDate: Date = new Date();
+            const endDate: Date = new Date();
+
+            startDate.setFullYear(startDate.getFullYear() + i);
+            endDate.setFullYear(startDate.getFullYear() + 1);
+
+            return {
+                id: id,
+                title: `Sprint ${id}`,
+                startDate: startDate,
+                endDate: endDate
+            };
+        });
 }
 
 export function mockAllReleases(): IRelease[] {
@@ -58,17 +66,26 @@ export function mockAllIssueTypes(): IIssueType[] {
         {
             id: DefaultIssueTypeIds.Epic,
             title: 'Epic',
-            level: 2
+            level: 2,
+            color: 'purple'
         },
         {
             id: DefaultIssueTypeIds.UserStory,
             title: 'User story',
-            level: 1
+            level: 1,
+            color: 'lightgreen'
         },
         {
             id: DefaultIssueTypeIds.Subtask,
             title: 'Subtask',
-            level: 0
+            level: 0,
+            color: 'lightblue'
+        },
+        {
+            id: DefaultIssueTypeIds.Clarification,
+            title: 'Clarification',
+            level: 0,
+            color: 'orange'
         }
     ];
 }
@@ -77,23 +94,13 @@ export function mockIssueType(): IIssueType {
     const random: number = Math.random();
 
     if (random > 0.995) {
-        return {
-            id: DefaultIssueTypeIds.Epic,
-            title: 'Epic',
-            level: 2
-        }
+        return mockAllIssueTypes()[0];
     } else if (random > 0.95) {
-        return {
-            id: DefaultIssueTypeIds.UserStory,
-            title: 'User story',
-            level: 1
-        }
+        return mockAllIssueTypes()[1];
+    } else if (random > 0.90) {
+        return mockAllIssueTypes()[3];
     } else {
-        return {
-            id: DefaultIssueTypeIds.Subtask,
-            title: 'Subtask',
-            level: 0
-        }
+        return mockAllIssueTypes()[2];
     }
 }
 

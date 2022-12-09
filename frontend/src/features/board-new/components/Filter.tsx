@@ -12,6 +12,8 @@ export interface IFilterProps {
     setFilteredProject: React.Dispatch<React.SetStateAction<IProject>>;
     setIsFilterLoading?: React.Dispatch<React.SetStateAction<boolean>>;
     useManualUpdate?: boolean;
+    filterSprints?: boolean;
+    filterIssueTypes?: boolean;
 }
 
 export function Filter(props: IFilterProps) {
@@ -56,6 +58,15 @@ export function Filter(props: IFilterProps) {
                            isIssueAssignedToPeople;
                 })
             };
+
+            if (props.filterSprints) {
+                filteredProject.sprints = sprints;
+            }
+
+            if (props.filterIssueTypes) {
+                filteredProject.issueTypes = issueTypes;
+            }
+            
             setFilteredProject(filteredProject);
 
             if (!useManualUpdates) {
